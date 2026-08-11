@@ -3,12 +3,11 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useDebouncedCallback } from 'use-debounce';
+import Link from 'next/link';
 import { fetchNotes } from '@/lib/api';
 import NoteList from '@/components/NoteList/NoteList';
 import SearchBox from '@/components/SearchBox/SearchBox';
 import Pagination from '@/components/Pagination/Pagination';
-import Modal from '@/components/Modal/Modal';
-import NoteForm from '@/components/NoteForm/NoteForm';
 import css from './Notes.client.module.css';
 
 const PER_PAGE = 12;
@@ -20,7 +19,6 @@ interface NotesClientProps {
 export default function NotesClient({ initialSlug }: NotesClientProps) {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearch(value);
@@ -39,7 +37,7 @@ export default function NotesClient({ initialSlug }: NotesClientProps) {
   const totalPages = data?.totalPages ?? 0;
 
   return (
-    <div className={css.container}>
+    <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox onSearch={debouncedSearch} />
         {totalPages > 1 && (
@@ -49,9 +47,9 @@ export default function NotesClient({ initialSlug }: NotesClientProps) {
             forcePage={page}
           />
         )}
-        <button className={css.button} onClick={() => setIsModalOpen(true)}>
+        <Link href="/notes/action/create" className={css.button}>
           Create note +
-        </button>
+        </Link>
       </header>
 
       {isLoading && !isPlaceholderData && <p>Communing with the Machine Spirit... Please wait.</p>}
@@ -62,12 +60,6 @@ export default function NotesClient({ initialSlug }: NotesClientProps) {
       </div>
 
       {data && data.notes.length === 0 && !isLoading && <p>No notes found</p>}
-
-      {isModalOpen && (
-        <Modal onClose={() => setIsModalOpen(false)}>
-          <NoteForm onClose={() => setIsModalOpen(false)} />
-        </Modal>
-      )}
     </div>
   );
 }

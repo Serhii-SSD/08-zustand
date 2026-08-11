@@ -2,11 +2,11 @@
 
 .footer {
   padding: 20px;
-  background-color: #f0f0f0;
+  background-color: #292929;
   text-align: center;
   font-size: 14px;
-  color: #555;
-  border-top: 1px solid #ddd;
+  color: #ffa31a;
+  border-top: 1px solid #1b1b1b;
 }
 
 .wrap {
@@ -16,7 +16,7 @@
 }
 
 .footer a {
-  color: #226ec5;
+  color: #ffffff;
   font-weight: 600;
   text-decoration: none;
 }

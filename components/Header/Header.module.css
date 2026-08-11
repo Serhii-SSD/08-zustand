@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #333;
+  background-color: #292929;
   color: white;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .header a:hover {
-  color: #ddd;
+  color: #ffa31a;
 }
 
 .navigation {
@@ -33,5 +33,5 @@
 }
 
 .navigation li a:hover {
-  color: #ddd;
+  color: #ffa31a;
 }

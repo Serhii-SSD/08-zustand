@@ -1,3 +1,3 @@
 export default function Loading() {
-  return <p>Communing with the Machine Spirit... Please wait.</p>;
+  return <p style={{ color: '#ffa31a' }}>Communing with the Machine Spirit... Please wait.</p>;
 }
