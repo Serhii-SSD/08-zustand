@@ -14,6 +14,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://08-zustand-gamma-silk-25.vercel.app'),
   title: 'NoteHub',
   description: 'A simple and efficient application for managing personal notes',
   openGraph: {

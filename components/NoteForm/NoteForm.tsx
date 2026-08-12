@@ -1,13 +1,25 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNoteStore } from '@/lib/store/noteStore';
-import { createNoteAction } from '@/lib/actions';
+import { createNote } from '@/lib/api';
+import type { NoteTag } from '@/types/note';
 import css from './NoteForm.module.css';
 
 export default function NoteForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { draft, setDraft, clearDraft } = useNoteStore();
+
+  const mutation = useMutation({
+    mutationFn: createNote,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      clearDraft();
+      router.back();
+    },
+  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -16,10 +28,13 @@ export default function NoteForm() {
     setDraft({ [name]: value });
   };
 
-  const handleSubmit = async (formData: FormData) => {
-    await createNoteAction(formData);
-    clearDraft();
-    router.back();
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await mutation.mutateAsync({
+      title: draft.title,
+      content: draft.content,
+      tag: draft.tag as NoteTag,
+    });
   };
 
   const handleCancel = () => {
@@ -27,7 +42,7 @@ export default function NoteForm() {
   };
 
   return (
-    <form action={handleSubmit} className={css.form}>
+    <form onSubmit={handleSubmit} className={css.form}>
       <div className={css.formGroup}>
         <label htmlFor="title">Title</label>
         <input
@@ -77,7 +92,11 @@ export default function NoteForm() {
         <button type="button" className={css.cancelButton} onClick={handleCancel}>
           Cancel
         </button>
-        <button type="submit" className={css.submitButton}>
+        <button
+          type="submit"
+          className={css.submitButton}
+          disabled={mutation.isPending}
+        >
           Create note
         </button>
       </div>
